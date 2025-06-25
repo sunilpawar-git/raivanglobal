@@ -34,7 +34,7 @@ app.post('/api/assess', upload.single('model'), async (req, res) => {
 
     // Call OpenAI API for analysis
     const response = await openai.chat.completions.create({
-      model: "gpt-4-vision-preview",
+      model: "gpt-4o",
       messages: [
         {
           role: "user",

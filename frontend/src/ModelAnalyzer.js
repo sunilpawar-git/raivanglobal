@@ -39,7 +39,7 @@ function ModelAnalyzer() {
     formData.append('model', file);
 
     try {
-      const response = await fetch('http://localhost:5000/api/assess', {
+      const response = await fetch('http://localhost:5001/api/assess', {
         method: 'POST',
         body: formData,
       });
@@ -70,7 +70,7 @@ function ModelAnalyzer() {
             <input
               type="file"
               id="model-upload"
-              accept=".glb,.gltf,.obj,.fbx,.stl"
+              accept=".glb,.gltf,.obj,.fbx,.stl,.jpg,.jpeg,.png"
               onChange={handleFileChange}
               disabled={isLoading}
             />
