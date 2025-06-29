@@ -449,6 +449,8 @@ textarea.form-control {
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  display: block; /* Ensures margin auto works */
+  margin: 0 auto; /* Center the image */
 }
 
 .model-viewer-container {

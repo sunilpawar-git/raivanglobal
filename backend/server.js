@@ -133,17 +133,18 @@ app.post('/api/assess', upload.array('models', 10), async (req, res, next) => {
               - Initial Observations: ${initialObservations || 'None'}
               - Specific Concerns: ${specificConcerns || 'None'}
 
-              The following images have been provided as visual evidence. Analyze them carefully in conjunction with the assessor's notes to identify vulnerabilities.
+              The following images have been provided as visual evidence. Analyze them carefully in conjunction with the assessor's notes to identify vulnerabilities and positive security features.
 
               YOUR TASK:
-              Generate a comprehensive security audit report in Markdown format. The report MUST include the following sections:
-              1.  **Executive Summary:** A brief overview of the security posture.
+              Generate a comprehensive physical security audit report in Markdown format. The report MUST include the following sections:
+              1.  **Executive Summary:** A brief overview of the security posture, summarizing key findings.
               2.  **Identified Vulnerabilities:** A numbered list of all identified risks. For each risk, you must provide:
-                  *   **Vulnerability:** A clear description of the issue (e.g., "Unsecured Perimeter Fence").
-                  *   **Severity:** A rating of Low, Medium, or High.
-                  *   **Recommendation/SOP:** A detailed, actionable Standard Operating Procedure to mitigate the risk.
-              3.  **Positive Security Features:** A brief list of security measures that are correctly implemented.
-              4.  **Concluding Remarks.**
+                  *   **Vulnerability:** A clear, concise description of the issue (e.g., "Unsecured Perimeter Fence").
+                  *   **Observed in Image(s):** Reference which uploaded image(s) (e.g., "Image 1", "Image 3") show this vulnerability.
+                  *   **Severity:** A rating of Low, Medium, or High, with justification.
+                  *   **Recommendation/SOP:** A detailed, actionable Standard Operating Procedure (SOP) to mitigate the risk. This should be practical and specific.
+              3.  **Positive Security Features:** A numbered list of security measures that are correctly implemented or observed as beneficial. For each feature, reference which uploaded image(s) (e.g., "Image 2") show this feature.
+              4.  **Concluding Remarks:** A brief summary and any final recommendations.
             `
           },
           // Add image URLs

@@ -16,8 +16,8 @@ function Model({ url }) {
 
 function ModelAnalyzer() {
   // State management
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [files, setFiles] = useState([]);
+  const [previews, setPreviews] = useState([]);
   const [analysis, setAnalysis] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -46,24 +46,37 @@ function ModelAnalyzer() {
 
   // Handle file selection
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files?.[0];
-    if (!selectedFile) return;
+    const selectedFiles = Array.from(e.target.files);
+    if (selectedFiles.length === 0) return;
 
-    const fileExt = selectedFile.name.split('.').pop().toLowerCase();
-    const fullFileType = `.${fileExt}`;
-    
-    if (![...SUPPORTED_3D_FORMATS, ...SUPPORTED_IMAGE_FORMATS].includes(fullFileType)) {
-      setError(`Unsupported file type. Please upload one of: ${[...SUPPORTED_3D_FORMATS, ...SUPPORTED_IMAGE_FORMATS].join(', ')}`);
+    const newFiles = [];
+    const newPreviews = [];
+    let hasError = false;
+
+    selectedFiles.forEach(selectedFile => {
+      const fileExt = selectedFile.name.split('.').pop().toLowerCase();
+      const fullFileType = `.${fileExt}`;
+      
+      if (![...SUPPORTED_3D_FORMATS, ...SUPPORTED_IMAGE_FORMATS].includes(fullFileType)) {
+        setError(`Unsupported file type: ${selectedFile.name}. Only 3D models and images are allowed.`);
+        hasError = true;
+        return;
+      }
+      newFiles.push(selectedFile);
+      newPreviews.push(URL.createObjectURL(selectedFile));
+    });
+
+    if (hasError) {
+      setFiles([]);
+      setPreviews([]);
+      setAnalysis('');
       return;
     }
 
-    setFile(selectedFile);
+    setFiles(newFiles);
+    setPreviews(newPreviews);
     setError('');
     setAnalysis('');
-    
-    // Create preview URL
-    const fileUrl = URL.createObjectURL(selectedFile);
-    setPreview(fileUrl);
   };
 
   // Handle file drop
@@ -89,17 +102,19 @@ function ModelAnalyzer() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!file) {
-      setError('Please select a file to analyze');
+    if (files.length === 0) {
+      setError('Please select at least one file to analyze');
       return;
     }
 
     setIsLoading(true);
     setError('');
-    setAnalysis('Analyzing your model, please wait...');
+    setAnalysis('Analyzing your models, please wait...');
 
     const formData = new FormData();
-    formData.append('models', file); // Changed from 'model' to 'models' as backend expects 'models' array
+    files.forEach(file => {
+      formData.append('models', file); 
+    });
     formData.append('siteName', siteName);
     formData.append('facilityType', facilityType);
     formData.append('locationEnvironment', locationEnvironment);
@@ -129,11 +144,11 @@ function ModelAnalyzer() {
   // Clean up preview URLs on unmount
   useEffect(() => {
     return () => {
-      if (preview) {
-        URL.revokeObjectURL(preview);
-      }
+      previews.forEach(previewUrl => {
+        URL.revokeObjectURL(previewUrl);
+      });
     };
-  }, [preview]);
+  }, [previews]);
 
   return (
     <div className="model-analyzer">
@@ -232,9 +247,10 @@ function ModelAnalyzer() {
             ref={fileInputRef}
             onChange={handleFileChange}
             accept={[...SUPPORTED_3D_FORMATS, ...SUPPORTED_IMAGE_FORMATS].join(',')}
+            multiple // Allow multiple file selection
             style={{ display: 'none' }}
           />
-          <p>Drag & drop your 3D model here, or click to select</p>
+          <p>Drag & drop your files here, or click to select</p>
           <p className="file-types">
             Supported formats: {[...SUPPORTED_3D_FORMATS, ...SUPPORTED_IMAGE_FORMATS].join(', ')}
           </p>
@@ -243,46 +259,58 @@ function ModelAnalyzer() {
         {error && <div className="error-message">{error}</div>}
         
         {/* Selected File Info */}
-        {file && (
-          <div className="file-info">
-            <p>Selected: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)</p>
-            <button 
-              onClick={() => {
-                setFile(null);
-                setPreview(null);
-                setAnalysis('');
-                fileInputRef.current.value = '';
-              }}
-              className="clear-button"
-            >
-              Clear
-            </button>
+        {files.length > 0 && (
+          <div className="file-info-container">
+            {files.map((file, index) => (
+              <div key={index} className="file-info">
+                <p>Selected: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)</p>
+                <button 
+                  onClick={() => {
+                    const newFiles = files.filter((_, i) => i !== index);
+                    const newPreviews = previews.filter((_, i) => i !== index);
+                    setFiles(newFiles);
+                    setPreviews(newPreviews);
+                    if (newFiles.length === 0) {
+                      setAnalysis('');
+                      fileInputRef.current.value = '';
+                    }
+                  }}
+                  className="clear-button"
+                >
+                  Clear
+                </button>
+              </div>
+            ))}
           </div>
         )}
 
         {/* Preview Section */}
         <div className="preview-container">
-          {preview ? (
-            <div className="model-viewer">
-              {is3DModel(file?.name) ? (
-                <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
-                  <ambientLight intensity={0.5} />
-                  <pointLight position={[10, 10, 10]} />
-                  <Model url={preview} />
-                  <OrbitControls 
-                    enablePan={true}
-                    enableZoom={true}
-                    enableRotate={true}
-                  />
-                  <Environment preset="city" />
-                </Canvas>
-              ) : isImage(file?.name) ? (
-                <img src={preview} alt="Preview" className="preview-image" />
-              ) : (
-                <div className="unsupported-format">
-                  <p>Preview not available for this file type</p>
+          {previews.length > 0 ? (
+            <div className="model-viewer-grid">
+              {previews.map((previewUrl, index) => (
+                <div key={index} className="model-viewer">
+                  {is3DModel(files[index]?.name) ? (
+                    <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+                      <ambientLight intensity={0.5} />
+                      <pointLight position={[10, 10, 10]} />
+                      <Model url={previewUrl} />
+                      <OrbitControls 
+                        enablePan={true}
+                        enableZoom={true}
+                        enableRotate={true}
+                      />
+                      <Environment preset="city" />
+                    </Canvas>
+                  ) : isImage(files[index]?.name) ? (
+                    <img src={previewUrl} alt="Preview" className="preview-image" />
+                  ) : (
+                    <div className="unsupported-format">
+                      <p>Preview not available for this file type</p>
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
           ) : (
             <div className="preview-placeholder">
@@ -296,7 +324,7 @@ function ModelAnalyzer() {
           <div className="analyze-button-container">
             <button
               type="submit"
-              disabled={isLoading || !file}
+              disabled={isLoading || files.length === 0}
               className="analyze-button"
             >
               {isLoading ? 'Analyzing...' : 'Analyze for Security Assessment'}
