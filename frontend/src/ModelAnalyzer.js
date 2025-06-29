@@ -138,7 +138,10 @@ function ModelAnalyzer() {
   return (
     <div className="model-analyzer">
       <div className="upload-section">
-        <h2>Security Site Analyzer</h2>
+        <div className="hero-section">
+          <h1>AI-Powered Security Site Analyzer</h1>
+          <p className="subtitle">Upload visual evidence and provide context to generate comprehensive security assessment reports.</p>
+        </div>
 
         {/* Contextual Information Inputs */}
         <div className="context-inputs">
@@ -154,23 +157,44 @@ function ModelAnalyzer() {
           </div>
           <div className="input-group">
             <label htmlFor="facilityType">Facility Type:</label>
-            <input
-              type="text"
+            <select
               id="facilityType"
               value={facilityType}
               onChange={(e) => setFacilityType(e.target.value)}
-              placeholder="e.g., Commercial Office, Industrial Plant, Retail Store"
-            />
+            >
+              <option value="">Select Facility Type</option>
+              <option value="Commercial Office">Commercial Office</option>
+              <option value="Industrial Plant">Industrial Plant</option>
+              <option value="Retail Store">Retail Store</option>
+              <option value="Residential Complex">Residential Complex</option>
+              <option value="Data Center">Data Center</option>
+              <option value="Healthcare Facility">Healthcare Facility</option>
+              <option value="Educational Institution">Educational Institution</option>
+              <option value="Government Building">Government Building</option>
+              <option value="Transportation Hub">Transportation Hub</option>
+              <option value="Warehouse/Logistics">Warehouse/Logistics</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div className="input-group">
             <label htmlFor="locationEnvironment">Location Environment:</label>
-            <input
-              type="text"
+            <select
               id="locationEnvironment"
               value={locationEnvironment}
               onChange={(e) => setLocationEnvironment(e.target.value)}
-              placeholder="e.g., Urban, Rural, Suburban, Remote"
-            />
+            >
+              <option value="">Select Environment</option>
+              <option value="Urban">Urban</option>
+              <option value="Rural">Rural</option>
+              <option value="Suburban">Suburban</option>
+              <option value="Remote">Remote</option>
+              <option value="Coastal">Coastal</option>
+              <option value="Mountainous">Mountainous</option>
+              <option value="Industrial Zone">Industrial Zone</option>
+              <option value="Commercial District">Commercial District</option>
+              <option value="Residential Area">Residential Area</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div className="input-group">
             <label htmlFor="initialObservations">Initial Observations:</label>
@@ -269,13 +293,15 @@ function ModelAnalyzer() {
 
         {/* Analyze Button */}
         <form onSubmit={handleSubmit}>
-          <button
-            type="submit"
-            disabled={isLoading || !file}
-            className="analyze-button"
-          >
-            {isLoading ? 'Analyzing...' : 'Analyze Model'}
-          </button>
+          <div className="analyze-button-container">
+            <button
+              type="submit"
+              disabled={isLoading || !file}
+              className="analyze-button"
+            >
+              {isLoading ? 'Analyzing...' : 'Analyze for Security Assessment'}
+            </button>
+          </div>
         </form>
       </div>
       <div className="analysis-section">
