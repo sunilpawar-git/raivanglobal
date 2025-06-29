@@ -39,7 +39,7 @@ function ModelAnalyzer() {
     formData.append('model', file);
 
     try {
-      const response = await fetch('http://localhost:5001/api/assess', {
+      const response = await fetch('/api/assess', {
         method: 'POST',
         body: formData,
       });
