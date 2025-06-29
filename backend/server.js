@@ -46,18 +46,14 @@ const limiter = rateLimit({
 });
 
 // Apply rate limiting to all API routes
-app.use('/api/', limiter);
+// app.use('/api/', limiter); // Temporarily disabled for debugging CORS issue
 
 
 
 // Add CORS headers to allow file uploads from the frontend
 
 
-const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' ? 'https://your-frontend-domain.com' : '*',
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 // Configure multer for file uploads with validation
@@ -203,6 +199,8 @@ if (process.env.NODE_ENV === 'production') {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+  console.log(`PORT from .env: ${process.env.PORT}`);
 });
 
 // Error handling middleware (must be last)

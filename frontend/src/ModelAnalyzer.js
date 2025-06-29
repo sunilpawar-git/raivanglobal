@@ -107,7 +107,7 @@ function ModelAnalyzer() {
     formData.append('specificConcerns', specificConcerns);
 
     try {
-      const response = await fetch('http://localhost:3001/api/assess', {
+      const response = await fetch('http://localhost:5001/api/assess', {
         method: 'POST',
         body: formData,
       });
