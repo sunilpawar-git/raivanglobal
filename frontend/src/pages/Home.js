@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Container, Typography, Grid, Card, CardContent, CardMedia, useTheme } from '@mui/material';
+import { Box, Button, Container, Typography, Grid, Card, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import SecurityIcon from '@mui/icons-material/Security';
 import AssessmentIcon from '@mui/icons-material/Assessment';

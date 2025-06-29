@@ -7,8 +7,6 @@ import {
   TextField, 
   Button, 
   Paper,
-  Divider,
-  useTheme,
   Alert,
   Snackbar
 } from '@mui/material';
@@ -58,7 +56,7 @@ const ContactIcon = styled('div')(({ theme }) => ({
 }));
 
 function Contact() {
-  const theme = useTheme();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
