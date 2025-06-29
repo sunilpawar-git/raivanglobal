@@ -48,16 +48,10 @@ const limiter = rateLimit({
 // Apply rate limiting to all API routes
 app.use('/api/', limiter);
 
-// Increase the maximum request size for file uploads
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
 
 // Add CORS headers to allow file uploads from the frontend
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
+
 
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' ? 'https://your-frontend-domain.com' : '*',
@@ -108,7 +102,7 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-app.use(errorHandler);
+
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -116,53 +110,67 @@ const openai = new OpenAI({
 });
 
 // API endpoint for security assessment
-app.post('/api/assess', upload.single('model'), async (req, res, next) => {
+app.post('/api/assess', upload.array('models', 10), async (req, res, next) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+    const { siteName, facilityType, locationEnvironment, initialObservations, specificConcerns } = req.body;
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'No files uploaded' });
     }
 
-    // Additional validation
-    if (req.file.size > MAX_FILE_SIZE) {
-      return res.status(413).json({ error: 'File too large. Maximum size is 10MB.' });
-    }
+    // Construct the multi-modal prompt
+    const promptMessages = [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: `
+              You are a world-class physical security consultant with 20 years of experience creating security assessment reports and Standard Operating Procedures (SOPs) for major corporations.
 
-    if (!ALLOWED_FILE_TYPES.includes(req.file.mimetype)) {
-      return res.status(400).json({ 
-        error: 'Invalid file type. Only 3D model files (GLTF, GLB, OBJ, etc.) and images (JPG, PNG) are accepted.' 
-      });
-    }
+              You are analyzing the following location:
+              - Site Name: ${siteName || 'Not Provided'}
+              - Facility Type: ${facilityType || 'Not Provided'}
+              - Environment: ${locationEnvironment || 'Not Provided'}
 
-    // Convert file to base64
-    const base64File = req.file.buffer.toString('base64');
-    const mimeType = req.file.mimetype;
+              The on-site human assessor has provided the following notes:
+              - Initial Observations: ${initialObservations || 'None'}
+              - Specific Concerns: ${specificConcerns || 'None'}
+
+              The following images have been provided as visual evidence. Analyze them carefully in conjunction with the assessor's notes to identify vulnerabilities.
+
+              YOUR TASK:
+              Generate a comprehensive security audit report in Markdown format. The report MUST include the following sections:
+              1.  **Executive Summary:** A brief overview of the security posture.
+              2.  **Identified Vulnerabilities:** A numbered list of all identified risks. For each risk, you must provide:
+                  *   **Vulnerability:** A clear description of the issue (e.g., "Unsecured Perimeter Fence").
+                  *   **Severity:** A rating of Low, Medium, or High.
+                  *   **Recommendation/SOP:** A detailed, actionable Standard Operating Procedure to mitigate the risk.
+              3.  **Positive Security Features:** A brief list of security measures that are correctly implemented.
+              4.  **Concluding Remarks.**
+            `
+          },
+          // Add image URLs
+          ...req.files.map(file => ({
+            type: "image_url",
+            image_url: {
+              url: `data:${file.mimetype};base64,${file.buffer.toString('base64')}`
+            }
+          }))
+        ]
+      }
+    ];
 
     // Call OpenAI API for analysis
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: "Analyze this 3D model for security vulnerabilities. Identify potential security risks, check for common vulnerabilities, provide remediation steps, and rate severity (Low/Medium/High)."
-            },
-            {
-              type: "image_url",
-              image_url: {
-                url: `data:${mimeType};base64,${base64File}`
-              }
-            }
-          ]
-        }
-      ],
-      max_tokens: 1000
+      messages: promptMessages,
+      max_tokens: 2048 // Increased token limit for more detailed reports
     });
 
     res.json({
       analysis: response.choices[0].message.content,
-      filename: req.file.originalname
+      filenames: req.files.map(f => f.originalname)
     });
   } catch (error) {
     console.error('Error processing request:', {
@@ -196,3 +204,6 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// Error handling middleware (must be last)
+app.use(errorHandler);
