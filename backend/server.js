@@ -59,8 +59,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware
-app.use(cors());
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' ? 'https://your-frontend-domain.com' : '*',
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Configure multer for file uploads with validation
@@ -88,8 +91,11 @@ const errorHandler = (err, req, res, next) => {
     method: req.method
   });
 
-  if (err.code === 'LIMIT_FILE_SIZE') {
-    return res.status(413).json({ error: 'File too large. Maximum size is 10MB.' });
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({ error: `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB.` });
+    }
+    return res.status(400).json({ error: err.message });
   }
 
   if (err.message.includes('Invalid file type')) {

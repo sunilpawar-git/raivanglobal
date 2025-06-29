@@ -1,11 +1,7 @@
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useRef, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, useProgress, Html, useGLTF } from '@react-three/drei';
 import ReactMarkdown from 'react-markdown';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import THREE, { logThreeClasses } from './three-extensions';
 import './ModelAnalyzer.css';
 
 // Supported 3D model file extensions
@@ -19,33 +15,6 @@ function Loader() {
       <div className="loading-text">{Math.round(progress)}% loaded</div>
     </Html>
   );
-}
-
-// Simple error boundary for model loading
-class ModelErrorBoundary extends React.Component {
-  state = { hasError: false, error: null };
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('Model Error:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <Html center>
-          <div className="error">
-            <p>Failed to load model</p>
-            <p>{this.state.error?.message || 'Unknown error occurred'}</p>
-          </div>
-        </Html>
-      );
-    }
-    return this.props.children;
-  }
 }
 
 function Model({ url }) {
@@ -288,10 +257,10 @@ function ModelAnalyzer() {
               <div className="analysis-results markdown-body">
                 <ReactMarkdown
                   components={{
-                    h1: ({node, ...props}) => <h2 {...props} className="analysis-heading" />,
-                    h2: ({node, ...props}) => <h3 {...props} className="analysis-subheading" />,
-                    h3: ({node, ...props}) => <h4 {...props} className="analysis-subheading" />,
-                    ul: ({node, ...props}) => <ul {...props} className="analysis-list" />,
+                    h1: ({node, children, ...props}) => <h2 {...props} className="analysis-heading">{children}</h2>,
+                    h2: ({node, children, ...props}) => <h3 {...props} className="analysis-subheading">{children}</h3>,
+                    h3: ({node, children, ...props}) => <h4 {...props} className="analysis-subheading">{children}</h4>,
+                    ul: ({node, ordered, children, ...props}) => <ul {...props} className="analysis-list">{children}</ul>,
                   img: ({node, ...props}) => (
                     <img style={{maxWidth: '100%'}} {...props} alt={props.alt || ''} />
                   ),

@@ -1,4 +1,12 @@
 module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
+      },
+    },
+  },
   webpack: {
     configure: (webpackConfig, { env, paths }) => {
       // Find the rule that contains source-map-loader
