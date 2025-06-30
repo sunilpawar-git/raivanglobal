@@ -1,14 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
-import { Assessment, CheckCircle } from '@mui/icons-material';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, useGLTF } from '@react-three/drei';
 import ReactMarkdown from 'react-markdown';
-import HeroSection from './components/HeroSection';
 import './ModelAnalyzer.css';
-
-// Import illustration
-import modelAnalysisIllustration from './assets/images/model-analysis.svg';
 
 // Supported file formats
 const SUPPORTED_3D_FORMATS = ['.glb', '.gltf', '.obj', '.fbx'];
@@ -157,94 +152,16 @@ function ModelAnalyzer() {
   }, [previews]);
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Box sx={{ flex: '0 0 auto' }}>
-        <HeroSection
-          title={
-            <Box>
-              <Box sx={{ 
-                display: 'inline-flex',
-                alignItems: 'center',
-                backgroundColor: 'rgba(123, 104, 238, 0.1)',
-                px: 2,
-                py: 0.5,
-                borderRadius: '20px',
-                mb: 2
-              }}>
-                <Assessment sx={{ fontSize: 20, color: 'primary.main', mr: 1 }} />
-                <Typography 
-                  variant="overline" 
-                  sx={{ 
-                    letterSpacing: 1.5, 
-                    fontWeight: 600, 
-                    color: 'primary.main',
-                    lineHeight: 1.2
-                  }}
-                >
-                  AI MODEL SECURITY ANALYZER
-                </Typography>
-              </Box>
-              <Box sx={{ 
-                background: 'linear-gradient(90deg, #1a1a2e 0%, #4a4a68 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}>
-                Secure Your AI Models with Confidence
-              </Box>
-            </Box>
-          }
-        subtitle="Upload your AI model or enter model details to perform a comprehensive security analysis and identify potential vulnerabilities and risks before they become threats."
-        primaryButtonText="Upload Model"
-        primaryButtonLink="#"
-        primaryButtonOnClick={() => fileInputRef.current?.click()}
-        secondaryButtonText="View Documentation"
-        secondaryButtonLink="/documentation"
-        features={[
-          {
-            title: 'Threat Detection',
-            description: 'Identify potential security threats in your AI models',
-            icon: <CheckCircle color="primary" />
-          },
-          {
-            title: 'Vulnerability Assessment',
-            description: 'Comprehensive analysis of model weaknesses',
-            icon: <CheckCircle color="primary" />
-          },
-          {
-            title: 'Compliance Check',
-            description: 'Ensure your models meet industry standards',
-            icon: <CheckCircle color="primary" />
-          },
-          {
-            title: 'Detailed Reporting',
-            description: 'Get actionable insights and recommendations',
-            icon: <CheckCircle color="primary" />
-          }
-        ]}
-        image={modelAnalysisIllustration}
-        backgroundColor="white"
-        titleColor="#1a1a2e"
-        subtitleColor="#4a4a68"
-        buttonSx={{
-          '&.MuiButton-contained': {
-            background: 'linear-gradient(90deg, #7B68EE 0%, #5F4BDB 100%)',
-            color: 'white',
-            '&:hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: '0 10px 20px rgba(123, 104, 238, 0.3)',
-            },
-          },
-          '&.MuiButton-outlined': {
-            borderColor: '#7B68EE',
-            color: '#7B68EE',
-            '&:hover': {
-              backgroundColor: 'rgba(123, 104, 238, 0.05)',
-              borderColor: '#7B68EE',
-            },
-          },
-        }}
-      />
-      
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', p: 3 }}>
+      <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 2, color: '#1a1a2e' }}>
+          Security Audit Request
+        </Typography>
+        <Typography variant="subtitle1" sx={{ color: '#4a4a68', maxWidth: '800px', mx: 'auto' }}>
+          Please fill out the form below with details about your business location to receive a comprehensive security assessment. 
+          Our team will analyze the information and provide tailored recommendations to enhance your security posture.
+        </Typography>
+      </Box>
       <input
         type="file"
         ref={fileInputRef}
@@ -478,7 +395,6 @@ function ModelAnalyzer() {
           )}
         </div>
       </div>
-      </Box>
     </Box>
   );
 };

@@ -15,17 +15,17 @@ const services = [
   {
     icon: <SecurityIcon sx={{ fontSize: 60, color: 'primary.main' }} />,
     title: 'Security Audits',
-    description: 'Comprehensive security assessments to identify vulnerabilities in your applications and infrastructure.'
+    description: 'Comprehensive security assessments to identify vulnerabilities in your infrastructure.'
   },
   {
     icon: <AssessmentIcon sx={{ fontSize: 60, color: 'primary.main' }} />,
     title: 'Risk Assessment',
-    description: 'In-depth analysis of potential risks and threats to your digital assets and business operations.'
+    description: 'In-depth analysis of potential risks and threats to your assests and business operations.'
   },
   {
-    icon: <CodeIcon sx={{ fontSize: 60, color: 'primary.main' }} />,
-    title: 'Code Review',
-    description: 'Thorough examination of your source code to identify security flaws and improve code quality.'
+    icon: <SecurityIcon sx={{ fontSize: 50, color: 'primary.main' }} />,
+    title: 'Threat Mitigation',
+    description: 'Address security concerns with end-to-end mitigation, through tech/human level resolutions.'
   },
 ];
 
@@ -64,7 +64,7 @@ function Home() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}>
-              Next-Gen Security for Your Digital Assets
+              Next-Gen Security for \n Your Assets
             </Box>
           </>
         }
@@ -120,7 +120,7 @@ function Home() {
       />
 
       {/* Services Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
         <Typography variant="h3" component="h2" align="center" gutterBottom sx={{ mb: 6, fontWeight: 600 }}>
           Our Services
         </Typography>
