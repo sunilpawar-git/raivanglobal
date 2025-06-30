@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="300" cy="200" r="150" fill="#F5F5FF" stroke="#7B68EE" stroke-width="2"/>
+  
+  <!-- Graph Lines -->
+  <path d="M150 200H450" stroke="#7B68EE" stroke-width="2" stroke-dasharray="4 4"/>
+  <path d="M300 50V350" stroke="#7B68EE" stroke-width="2" stroke-dasharray="4 4"/>
+  
+  <!-- Graph Line -->
+  <path d="M180 250C220 150 280 180 300 120C320 180 380 150 420 250" 
+        stroke="#7B68EE" 
+        stroke-width="4" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- Data Points -->
+  <circle cx="180" cy="250" r="8" fill="white" stroke="#7B68EE" stroke-width="2"/>
+  <circle cx="240" cy="200" r="8" fill="white" stroke="#7B68EE" stroke-width="2"/>
+  <circle cx="300" cy="120" r="8" fill="white" stroke="#7B68EE" stroke-width="2">
+    <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="360" cy="200" r="8" fill="white" stroke="#7B68EE" stroke-width="2"/>
+  <circle cx="420" cy="250" r="8" fill="white" stroke="#7B68EE" stroke-width="2"/>
+  
+  <!-- AI Icon -->
+  <path d="M260 280C260 298.33 274.477 313 292.5 313C310.523 313 325 298.33 325 280C325 261.67 310.523 247 292.5 247C274.477 247 260 261.67 260 280Z" 
+        fill="white" 
+        stroke="#7B68EE" 
+        stroke-width="4"/>
+  <path d="M280 280H305" stroke="#7B68EE" stroke-width="4" stroke-linecap="round"/>
+  <path d="M292.5 268V292" stroke="#7B68EE" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Decorative Elements -->
+  <circle cx="200" cy="100" r="6" fill="#7B68EE" fill-opacity="0.2">
+    <animate attributeName="r" values="6;10;6" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="400" cy="300" r="8" fill="#7B68EE" fill-opacity="0.2">
+    <animate attributeName="r" values="8;12;8" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="350" cy="80" r="5" fill="#7B68EE" fill-opacity="0.2">
+    <animate attributeName="r" values="5;9;5" dur="3.5s" repeatCount="indefinite"/>
+  </circle>
+</svg>

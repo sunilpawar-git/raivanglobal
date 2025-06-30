@@ -1,8 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Box, Typography } from '@mui/material';
+import { Assessment, CheckCircle } from '@mui/icons-material';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, useGLTF } from '@react-three/drei';
 import ReactMarkdown from 'react-markdown';
+import HeroSection from './components/HeroSection';
 import './ModelAnalyzer.css';
+
+// Import illustration
+import modelAnalysisIllustration from './assets/images/model-analysis.svg';
 
 // Supported file formats
 const SUPPORTED_3D_FORMATS = ['.glb', '.gltf', '.obj', '.fbx'];
@@ -151,187 +157,269 @@ function ModelAnalyzer() {
   }, [previews]);
 
   return (
-    <div className="model-analyzer">
-      <div className="upload-section">
-        <div className="hero-section">
-          <h1>AI-Powered Security Site Analyzer</h1>
-          <p className="subtitle">Upload visual evidence and provide context to generate comprehensive security assessment reports.</p>
-        </div>
-
-        {/* Contextual Information Inputs */}
-        <div className="context-inputs">
-          <div className="input-group">
-            <label htmlFor="siteName">Site Name:</label>
-            <input
-              type="text"
-              id="siteName"
-              value={siteName}
-              onChange={(e) => setSiteName(e.target.value)}
-              placeholder="e.g., Main Office Building, Warehouse A"
-            />
-          </div>
-          <div className="input-group">
-            <label htmlFor="facilityType">Facility Type:</label>
-            <select
-              id="facilityType"
-              value={facilityType}
-              onChange={(e) => setFacilityType(e.target.value)}
-            >
-              <option value="">Select Facility Type</option>
-              <option value="Commercial Office">Commercial Office</option>
-              <option value="Industrial Plant">Industrial Plant</option>
-              <option value="Retail Store">Retail Store</option>
-              <option value="Residential Complex">Residential Complex</option>
-              <option value="Data Center">Data Center</option>
-              <option value="Healthcare Facility">Healthcare Facility</option>
-              <option value="Educational Institution">Educational Institution</option>
-              <option value="Government Building">Government Building</option>
-              <option value="Transportation Hub">Transportation Hub</option>
-              <option value="Warehouse/Logistics">Warehouse/Logistics</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div className="input-group">
-            <label htmlFor="locationEnvironment">Location Environment:</label>
-            <select
-              id="locationEnvironment"
-              value={locationEnvironment}
-              onChange={(e) => setLocationEnvironment(e.target.value)}
-            >
-              <option value="">Select Environment</option>
-              <option value="Urban">Urban</option>
-              <option value="Rural">Rural</option>
-              <option value="Suburban">Suburban</option>
-              <option value="Remote">Remote</option>
-              <option value="Coastal">Coastal</option>
-              <option value="Mountainous">Mountainous</option>
-              <option value="Industrial Zone">Industrial Zone</option>
-              <option value="Commercial District">Commercial District</option>
-              <option value="Residential Area">Residential Area</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div className="input-group">
-            <label htmlFor="initialObservations">Initial Observations:</label>
-            <textarea
-              id="initialObservations"
-              value={initialObservations}
-              onChange={(e) => setInitialObservations(e.target.value)}
-              placeholder="e.g., Appears well-maintained, some overgrown foliage, visible security cameras"
-              rows="3"
-            ></textarea>
-          </div>
-          <div className="input-group">
-            <label htmlFor="specificConcerns">Specific Concerns (if any):</label>
-            <textarea
-              id="specificConcerns"
-              value={specificConcerns}
-              onChange={(e) => setSpecificConcerns(e.target.value)}
-              placeholder="e.g., Broken gate on west side, unlit back entrance, suspicious loitering"
-              rows="3"
-            ></textarea>
-          </div>
-        </div>
-
-        <h2>Upload Visual Evidence</h2>
-        
-        {/* File Upload Area */}
-        <div 
-          className="drop-zone" 
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            accept={[...SUPPORTED_3D_FORMATS, ...SUPPORTED_IMAGE_FORMATS].join(',')}
-            multiple // Allow multiple file selection
-            style={{ display: 'none' }}
-          />
-          <p>Drag & drop your files here, or click to select</p>
-          <p className="file-types">
-            Supported formats: {[...SUPPORTED_3D_FORMATS, ...SUPPORTED_IMAGE_FORMATS].join(', ')}
-          </p>
-        </div>
-
-        {error && <div className="error-message">{error}</div>}
-        
-        {/* Selected File Info */}
-        {files.length > 0 && (
-          <div className="file-info-container">
-            {files.map((file, index) => (
-              <div key={index} className="file-info">
-                <p>Selected: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)</p>
-                <button 
-                  onClick={() => {
-                    const newFiles = files.filter((_, i) => i !== index);
-                    const newPreviews = previews.filter((_, i) => i !== index);
-                    setFiles(newFiles);
-                    setPreviews(newPreviews);
-                    if (newFiles.length === 0) {
-                      setAnalysis('');
-                      fileInputRef.current.value = '';
-                    }
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ flex: '0 0 auto' }}>
+        <HeroSection
+          title={
+            <Box>
+              <Box sx={{ 
+                display: 'inline-flex',
+                alignItems: 'center',
+                backgroundColor: 'rgba(123, 104, 238, 0.1)',
+                px: 2,
+                py: 0.5,
+                borderRadius: '20px',
+                mb: 2
+              }}>
+                <Assessment sx={{ fontSize: 20, color: 'primary.main', mr: 1 }} />
+                <Typography 
+                  variant="overline" 
+                  sx={{ 
+                    letterSpacing: 1.5, 
+                    fontWeight: 600, 
+                    color: 'primary.main',
+                    lineHeight: 1.2
                   }}
-                  className="clear-button"
                 >
-                  Clear
-                </button>
+                  AI MODEL SECURITY ANALYZER
+                </Typography>
+              </Box>
+              <Box sx={{ 
+                background: 'linear-gradient(90deg, #1a1a2e 0%, #4a4a68 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>
+                Secure Your AI Models with Confidence
+              </Box>
+            </Box>
+          }
+        subtitle="Upload your AI model or enter model details to perform a comprehensive security analysis and identify potential vulnerabilities and risks before they become threats."
+        primaryButtonText="Upload Model"
+        primaryButtonLink="#"
+        primaryButtonOnClick={() => fileInputRef.current?.click()}
+        secondaryButtonText="View Documentation"
+        secondaryButtonLink="/documentation"
+        features={[
+          {
+            title: 'Threat Detection',
+            description: 'Identify potential security threats in your AI models',
+            icon: <CheckCircle color="primary" />
+          },
+          {
+            title: 'Vulnerability Assessment',
+            description: 'Comprehensive analysis of model weaknesses',
+            icon: <CheckCircle color="primary" />
+          },
+          {
+            title: 'Compliance Check',
+            description: 'Ensure your models meet industry standards',
+            icon: <CheckCircle color="primary" />
+          },
+          {
+            title: 'Detailed Reporting',
+            description: 'Get actionable insights and recommendations',
+            icon: <CheckCircle color="primary" />
+          }
+        ]}
+        image={modelAnalysisIllustration}
+        backgroundColor="white"
+        titleColor="#1a1a2e"
+        subtitleColor="#4a4a68"
+        buttonSx={{
+          '&.MuiButton-contained': {
+            background: 'linear-gradient(90deg, #7B68EE 0%, #5F4BDB 100%)',
+            color: 'white',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0 10px 20px rgba(123, 104, 238, 0.3)',
+            },
+          },
+          '&.MuiButton-outlined': {
+            borderColor: '#7B68EE',
+            color: '#7B68EE',
+            '&:hover': {
+              backgroundColor: 'rgba(123, 104, 238, 0.05)',
+              borderColor: '#7B68EE',
+            },
+          },
+        }}
+      />
+      
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+        accept={[...SUPPORTED_3D_FORMATS, ...SUPPORTED_IMAGE_FORMATS].join(',')}
+        multiple // Allow multiple file selection
+      />
+      
+      {/* Contextual Information Inputs */}
+      <div className="context-inputs">
+        <div className="input-group">
+          <label htmlFor="siteName">Site Name:</label>
+          <input
+            type="text"
+            id="siteName"
+            value={siteName}
+            onChange={(e) => setSiteName(e.target.value)}
+            placeholder="e.g., Main Office Building, Warehouse A"
+          />
+        </div>
+        <div className="input-group">
+          <label htmlFor="facilityType">Facility Type:</label>
+          <select
+            id="facilityType"
+            value={facilityType}
+            onChange={(e) => setFacilityType(e.target.value)}
+          >
+            <option value="">Select Facility Type</option>
+            <option value="Commercial Office">Commercial Office</option>
+            <option value="Industrial Plant">Industrial Plant</option>
+            <option value="Retail Store">Retail Store</option>
+            <option value="Residential Complex">Residential Complex</option>
+            <option value="Data Center">Data Center</option>
+            <option value="Healthcare Facility">Healthcare Facility</option>
+            <option value="Educational Institution">Educational Institution</option>
+            <option value="Government Building">Government Building</option>
+            <option value="Transportation Hub">Transportation Hub</option>
+            <option value="Warehouse/Logistics">Warehouse/Logistics</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div className="input-group">
+          <label htmlFor="locationEnvironment">Location Environment:</label>
+          <select
+            id="locationEnvironment"
+            value={locationEnvironment}
+            onChange={(e) => setLocationEnvironment(e.target.value)}
+          >
+            <option value="">Select Environment</option>
+            <option value="Urban">Urban</option>
+            <option value="Rural">Rural</option>
+            <option value="Suburban">Suburban</option>
+            <option value="Remote">Remote</option>
+            <option value="Coastal">Coastal</option>
+            <option value="Mountainous">Mountainous</option>
+            <option value="Industrial Zone">Industrial Zone</option>
+            <option value="Commercial District">Commercial District</option>
+            <option value="Residential Area">Residential Area</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div className="input-group">
+          <label htmlFor="initialObservations">Initial Observations:</label>
+          <textarea
+            id="initialObservations"
+            value={initialObservations}
+            onChange={(e) => setInitialObservations(e.target.value)}
+            placeholder="e.g., Appears well-maintained, some overgrown foliage, visible security cameras"
+            rows="3"
+          ></textarea>
+        </div>
+        <div className="input-group">
+          <label htmlFor="specificConcerns">Specific Concerns (if any):</label>
+          <textarea
+            id="specificConcerns"
+            value={specificConcerns}
+            onChange={(e) => setSpecificConcerns(e.target.value)}
+            placeholder="e.g., Broken gate on west side, unlit back entrance, suspicious loitering"
+            rows="3"
+          ></textarea>
+        </div>
+      </div>
+
+      <h2>Upload Visual Evidence</h2>
+      
+      {/* File Upload Area */}
+      <div 
+        className="drop-zone" 
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onClick={() => fileInputRef.current?.click()}
+      >
+        <p>Drag & drop your files here, or click to select</p>
+        <p className="file-types">
+          Supported formats: {[...SUPPORTED_3D_FORMATS, ...SUPPORTED_IMAGE_FORMATS].join(', ')}
+        </p>
+      </div>
+
+      {error && <div className="error-message">{error}</div>}
+      
+      {/* Selected File Info */}
+      {files.length > 0 && (
+        <div className="file-info-container">
+          {files.map((file, index) => (
+            <div key={index} className="file-info">
+              <p>Selected: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)</p>
+              <button 
+                onClick={() => {
+                  const newFiles = files.filter((_, i) => i !== index);
+                  const newPreviews = previews.filter((_, i) => i !== index);
+                  setFiles(newFiles);
+                  setPreviews(newPreviews);
+                  if (newFiles.length === 0) {
+                    setAnalysis('');
+                    fileInputRef.current.value = '';
+                  }
+                }}
+                className="clear-button"
+              >
+                Clear
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Preview Section */}
+      <div className="preview-container">
+        {previews.length > 0 ? (
+          <div className="model-viewer-grid">
+            {previews.map((previewUrl, index) => (
+              <div key={index} className="model-viewer">
+                {is3DModel(files[index]?.name) ? (
+                  <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+                    <ambientLight intensity={0.5} />
+                    <pointLight position={[10, 10, 10]} />
+                    <Model url={previewUrl} />
+                    <OrbitControls 
+                      enablePan={true}
+                      enableZoom={true}
+                      enableRotate={true}
+                    />
+                    <Environment preset="city" />
+                  </Canvas>
+                ) : isImage(files[index]?.name) ? (
+                  <img src={previewUrl} alt="Preview" className="preview-image" />
+                ) : (
+                  <div className="unsupported-format">
+                    <p>Preview not available for this file type</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
-        )}
-
-        {/* Preview Section */}
-        <div className="preview-container">
-          {previews.length > 0 ? (
-            <div className="model-viewer-grid">
-              {previews.map((previewUrl, index) => (
-                <div key={index} className="model-viewer">
-                  {is3DModel(files[index]?.name) ? (
-                    <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
-                      <ambientLight intensity={0.5} />
-                      <pointLight position={[10, 10, 10]} />
-                      <Model url={previewUrl} />
-                      <OrbitControls 
-                        enablePan={true}
-                        enableZoom={true}
-                        enableRotate={true}
-                      />
-                      <Environment preset="city" />
-                    </Canvas>
-                  ) : isImage(files[index]?.name) ? (
-                    <img src={previewUrl} alt="Preview" className="preview-image" />
-                  ) : (
-                    <div className="unsupported-format">
-                      <p>Preview not available for this file type</p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="preview-placeholder">
-              <p>No file selected for preview</p>
-            </div>
-          )}
-        </div>
-
-        {/* Analyze Button */}
-        <form onSubmit={handleSubmit}>
-          <div className="analyze-button-container">
-            <button
-              type="submit"
-              disabled={isLoading || files.length === 0}
-              className="analyze-button"
-            >
-              {isLoading ? 'Analyzing...' : 'Analyze for Security Assessment'}
-            </button>
+        ) : (
+          <div className="preview-placeholder">
+            <p>No file selected for preview</p>
           </div>
-        </form>
+        )}
       </div>
+
+      {/* Analyze Button */}
+      <form onSubmit={handleSubmit}>
+        <div className="analyze-button-container">
+          <button
+            type="submit"
+            disabled={isLoading || files.length === 0}
+            className="analyze-button"
+          >
+            {isLoading ? 'Analyzing...' : 'Analyze for Security Assessment'}
+          </button>
+        </div>
+      </form>
+
       <div className="analysis-section">
         <h3>Security Assessment Report</h3>
         <div className="analysis-content">
@@ -390,7 +478,8 @@ function ModelAnalyzer() {
           )}
         </div>
       </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
