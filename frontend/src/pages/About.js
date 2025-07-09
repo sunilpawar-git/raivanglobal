@@ -53,8 +53,8 @@ function About() {
       {/* Hero Section */}
       <Box
         sx={{
-          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-          color: 'white',
+          backgroundColor: 'white',
+          color: 'primary.main',
           py: 12,
           textAlign: 'center',
         }}
@@ -105,7 +105,7 @@ function About() {
       </Container>
 
       {/* Our Values */}
-      <Box sx={{ backgroundColor: theme.palette.background.default, py: 8 }}>
+      <Box sx={{ backgroundColor: 'white', py: 8 }}>
         <Container maxWidth="lg">
           <Typography variant="h3" component="h2" align="center" gutterBottom sx={{ mb: 6, fontWeight: 600 }}>
             Our Values
@@ -192,7 +192,7 @@ function About() {
       </Container>
 
       {/* Stats */}
-      <Box sx={{ backgroundColor: theme.palette.primary.main, color: 'white', py: 6 }}>
+      <Box sx={{ backgroundColor: 'white', color: '#1a1a2e', py: 6 }}>
         <Container maxWidth="lg">
           <Grid container spacing={4} justifyContent="center">
             {stats.map((stat, index) => (

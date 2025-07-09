@@ -11,7 +11,8 @@ const theme = createTheme({
       main: '#ff6d00', // Orange
     },
     background: {
-      default: '#f5f7fa',
+      default: 'white',
+      paper: 'white',
     },
   },
   typography: {
@@ -21,6 +22,15 @@ const theme = createTheme({
     },
     h2: {
       fontWeight: 600,
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundColor: 'white',
+        },
+      },
     },
   },
 });
@@ -61,6 +71,24 @@ function Layout({ children }) {
                   }}
                 >
                   Services
+                </Typography>
+                <Typography
+                  variant="body2"
+                  component="a"
+                  href="/analyze"
+                  sx={{
+                    my: 2,
+                    mx: 2,
+                    color: '#ff6d00',
+                    textDecoration: 'none',
+                    fontWeight: 600,
+                    '&:hover': { 
+                      textDecoration: 'underline',
+                      color: '#ff8a00'
+                    },
+                  }}
+                >
+                  Security Analysis
                 </Typography>
                 <Typography
                   variant="body2"

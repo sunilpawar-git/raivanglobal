@@ -108,11 +108,8 @@ function Contact() {
       {/* Hero Section */}
       <Box
         sx={{
-          background: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${ContactImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-          color: 'white',
+          backgroundColor: 'white',
+          color: 'primary.main',
           py: 15,
           textAlign: 'center',
           position: 'relative',

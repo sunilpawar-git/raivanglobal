@@ -64,7 +64,7 @@ function Home() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}>
-              Next-Gen Security for \n Your Assets
+              Next-Gen Solution for Your Assets
             </Box>
           </>
         }
@@ -157,8 +157,8 @@ function Home() {
       {/* CTA Section */}
       <Box
         sx={{
-          backgroundColor: theme.palette.primary.main,
-          color: 'white',
+          backgroundColor: 'white',
+          color: '#1a1a2e',
           py: 8,
           textAlign: 'center',
         }}
@@ -167,12 +167,11 @@ function Home() {
           <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
             Ready to Secure Your Business?
           </Typography>
-          <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
+          <Typography variant="h6" sx={{ mb: 4, color: '#4a4a68' }}>
             Contact us today for a free consultation and discover how we can help protect your digital assets.
           </Typography>
           <Button
             variant="contained"
-            color="secondary"
             size="large"
             component={Link}
             to="/contact"
@@ -181,9 +180,11 @@ function Home() {
               py: 1.5,
               fontSize: '1.1rem',
               fontWeight: 600,
+              background: 'linear-gradient(90deg, #7B68EE 0%, #5F4BDB 100%)',
+              color: 'white',
               '&:hover': {
                 transform: 'translateY(-2px)',
-                boxShadow: 3,
+                boxShadow: '0 10px 20px rgba(123, 104, 238, 0.3)',
               },
               transition: 'all 0.3s',
             }}

@@ -116,11 +116,8 @@ function Services() {
       {/* Hero Section */}
       <Box
         sx={{
-          background: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${ServiceHero})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-          color: 'white',
+          backgroundColor: 'white',
+          color: 'primary.main',
           py: 15,
           textAlign: 'center',
         }}
@@ -183,7 +180,7 @@ function Services() {
       </Container>
 
       {/* Process Section */}
-      <Box sx={{ backgroundColor: theme.palette.background.default, py: 8 }}>
+      <Box sx={{ backgroundColor: 'white', py: 8 }}>
         <Container maxWidth="lg">
           <Typography variant="h3" component="h2" align="center" gutterBottom sx={{ mb: 6, fontWeight: 600 }}>
             Our Security Assessment Process
@@ -257,8 +254,8 @@ function Services() {
 
       {/* CTA Section */}
       <Box sx={{ 
-        backgroundColor: theme.palette.primary.main, 
-        color: 'white', 
+        backgroundColor: 'white', 
+        color: '#1a1a2e', 
         py: 8,
         textAlign: 'center'
       }}>
@@ -266,12 +263,11 @@ function Services() {
           <Typography variant="h3" component="h2" gutterBottom sx={{ fontWeight: 700, mb: 3 }}>
             Ready to Secure Your Business?
           </Typography>
-          <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
+          <Typography variant="h6" sx={{ mb: 4, color: '#4a4a68' }}>
             Contact us today to discuss your security needs and get a free consultation.
           </Typography>
           <Button 
             variant="contained" 
-            color="secondary" 
             size="large"
             href="/contact"
             sx={{
@@ -279,9 +275,11 @@ function Services() {
               py: 1.5,
               fontSize: '1.1rem',
               fontWeight: 600,
+              background: 'linear-gradient(90deg, #7B68EE 0%, #5F4BDB 100%)',
+              color: 'white',
               '&:hover': {
                 transform: 'translateY(-2px)',
-                boxShadow: 3,
+                boxShadow: '0 10px 20px rgba(123, 104, 238, 0.3)',
               },
               transition: 'all 0.3s',
             }}
